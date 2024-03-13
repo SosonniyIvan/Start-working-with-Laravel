@@ -13,6 +13,9 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'slug', 'parent_id'];
+    public $sortable = ['id', 'name', 'parent_id'];
+    public $sortableAs = ['products_count'];
+
 
     public function parent(): BelongsTo
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Repositories\Contract;
+namespace App\Repositories\Contract;
 
 use App\Http\Requests\Products\CreateProductRequest;
 use App\Models\Product;

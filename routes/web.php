@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test', function (){
+    app(\App\Services\Contract\FileStorageServiceInterface::class)->remove('test');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

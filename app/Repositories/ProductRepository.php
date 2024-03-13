@@ -1,14 +1,20 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Repositories;
 
 use App\Http\Requests\Products\CreateProductRequest;
 use App\Models\Product;
+use App\Repositories\Contract\ImageRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ProductRepository implements Contract\ProductsRepositoryInterface
+class ProductRepository implements \App\Repositories\Contract\ProductsRepositoryInterface
 {
+
+    public function __construct(protected ImageRepositoryInterface $imageRepository)
+    {
+
+    }
 
     public function create(CreateProductRequest $request): Product|false
     {
@@ -40,6 +46,12 @@ class ProductRepository implements Contract\ProductsRepositoryInterface
         if (!empty($data['categories'])){
             $product->categories()->attach($data['categories']);
         }
+
+        $this->imageRepository->attach(
+            $product,
+            'images',
+                $data['attributes']['images'] ?? [],
+            $product->slug);
     }
 
     protected function formRequestData(CreateProductRequest $request): array
@@ -53,8 +65,8 @@ class ProductRepository implements Contract\ProductsRepositoryInterface
     protected function addSlugToAttributes(array $attributes): array
     {
         return array_merge(
-            $attributes,
-            ['slug' => Str::of($attributes['title'])->slug()->value()]
+            ['slug' => Str::of($attributes['title'])->slug()->value()],
+            $attributes
         );
     }
 }
